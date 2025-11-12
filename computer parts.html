@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Computer Parts (Qatar)</title>
+  <style>
+    :root{
+      --accent:#0a74da;
+      --muted:#666;
+      --card-bg: #fff;
+      --page-bg:#f4f7fb;
+      --max-width:1100px;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    html,body{height:100%;margin:0;background:var(--page-bg);color:#222}
+    .container{max-width:var(--max-width);margin:24px auto;padding:0 16px}
+
+    header{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;background:linear-gradient(135deg,#0a74da,#00c6ff);border-radius:8px;display:grid;place-items:center;color:white;font-weight:700}
+    nav a{margin-left:12px;color:var(--muted);text-decoration:none}
+
+    .hero{display:flex;gap:24px;align-items:center;margin:18px 0;padding:18px;background:linear-gradient(180deg,rgba(10,116,218,0.06),transparent);border-radius:10px}
+    .hero .text h1{margin:0 0 8px 0}
+    .hero .cta{margin-top:6px}
+    .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
+
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{background:var(--card-bg);padding:12px;border-radius:8px;box-shadow:0 1px 4px rgba(10,10,10,0.06)}
+    .product img{width:100%;height:140px;object-fit:contain;background:#f7f9fc;border-radius:6px}
+    .product h3{margin:8px 0 6px 0;font-size:16px}
+    .price{font-weight:700}
+    .small{font-size:13px;color:var(--muted)}
+
+    aside.cart{position:sticky;top:20px;height:max-content}
+    .cart-list{list-style:none;padding:0;margin:8px 0}
+    .cart-item{display:flex;gap:8px;align-items:center;padding:8px;border-radius:6px;background:#fff}
+    .cart-item img{width:48px;height:48px;object-fit:contain}
+    footer{margin:28px 0 60px 0;color:var(--muted);font-size:14px}
+
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr}
+      aside.cart{position:static}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">cp</div>
+        <div>
+          <div style="font-weight:700">Store</div>
+          <div class="small">Computer parts — Doha, Qatar</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="text">
+        <h1>Quality computer parts — locally in Qatar</h1>
+        <p class="small">Hand-picked components for gaming, office, and professional builds. Prices shown in QAR (ر.ق).</p>
+        <div class="cta"><button class="btn" onclick="scrollToProducts()">Shop now</button></div>
+      </div>
+      <div style="flex:1">
+        <!-- simple sample image / placeholder -->
+        <img src="https://via.placeholder.com/480x180?text=Store+974" alt="Store 974" style="width:100%;border-radius:8px;">
+      </div>
+    </section>
+
+    <div class="grid">
+      <main>
+        <section id="products">
+          <h2>Popular parts</h2>
+          <p class="small">A simple list of products for a beginner-coded store. Each product has a quick "Add to cart" button.</p>
+
+          <div class="products" id="product-list">
+            <!-- Product cards are inserted by JavaScript -->
+          </div>
+        </section>
+
+        <section id="about" style="margin-top:20px">
+          <h2>About Store 974</h2>
+          <p class="small">This is a small local shop inspired by Qatari retail: friendly service, local pickup in Doha, and easy online ordering. Beginner-friendly website created with plain HTML, CSS and JavaScript.</p>
+        </section>
+
+        <section id="contact" style="margin-top:20px">
+          <h2>Contact & Location</h2>
+          <p class="small">Phone: +974 7039 3293<br> Email: jianpogigenerans@gmail.com<br> Address: Barwa City, Doha, Qatar</p>
+        </section>
+      </main>
+
+      <aside class="cart">
+        <div class="card">
+          <h3>Your Cart</h3>
+          <div class="small">Items you add appear here.</div>
+          <ul class="cart-list" id="cart-list"></ul>
+          <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="small">Total</div>
+              <div id="cart-total">ر.ق 0.00</div>
+            </div>
+            <div>
+              <button class="btn" id="checkout-btn" onclick="checkout()">Checkout</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div>© <span id="year"></span> Store — Built simply for your desires.</div>
+    </footer>
+  </div>
+
+  <script>
+    // Beginner-friendly product data (an array of objects)
+    const products = [
+      {id:1, title:'Intel Core i5-12400F', price:799, desc:'6-core desktop CPU', img:'https://via.placeholder.com/300x180?text=CPU'},
+      {id:2, title:'NVIDIA RTX 4060 8GB', price:1499, desc:'Graphics card for 1080p/1440p', img:'https://via.placeholder.com/300x180?text=GPU'},
+      {id:3, title:'Kingston 16GB DDR4 3200MHz', price:199, desc:'Single stick RAM', img:'https://via.placeholder.com/300x180?text=RAM'},
+      {id:4, title:'Samsung 1TB NVMe SSD', price:389, desc:'Fast storage for OS and games', img:'https://via.placeholder.com/300x180?text=SSD'},
+      {id:5, title:'MSI B660 Motherboard', price:549, desc:'ATX motherboard with Wi-Fi', img:'https://via.placeholder.com/300x180?text=Motherboard'},
+      {id:6, title:'Corsair 650W Gold PSU', price:329, desc:'Reliable power supply', img:'https://via.placeholder.com/300x180?text=PSU'},
+    ];
+
+    // Simple cart stored in memory
+    const cart = [];
+
+    function formatQAR(amount){
+      // show QAR with Arabic symbol ر.ق (simple formatting)
+      return 'ر.ق ' + amount.toFixed(2);
+    }
+
+    function renderProducts(){
+      const list = document.getElementById('product-list');
+      list.innerHTML = '';
+      products.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'card product';
+        el.innerHTML = `
+          <img src="${p.img}" alt="${p.title}">
+          <h3>${p.title}</h3>
+          <div class="small">${p.desc}</div>
+          <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center">
+            <div class="price">${formatQAR(p.price)}</div>
+            <button class="btn" onclick="addToCart(${p.id})">Add</button>
+          </div>
+        `;
+        list.appendChild(el);
+      });
+    }
+
+    function addToCart(productId){
+      const product = products.find(p=>p.id===productId);
+      if(!product) return;
+      // find if exists
+      const existing = cart.find(c=>c.id===productId);
+      if(existing){ existing.qty += 1; }
+      else{ cart.push({id:product.id, title:product.title, price:product.price, qty:1, img:product.img}); }
+      renderCart();
+    }
+
+    function removeFromCart(productId){
+      const idx = cart.findIndex(c=>c.id===productId);
+      if(idx>-1) cart.splice(idx,1);
+      renderCart();
+    }
+
+    function renderCart(){
+      const list = document.getElementById('cart-list');
+      list.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.qty;
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+        li.innerHTML = `
+          <img src="${item.img}" alt="${item.title}">
+          <div style="flex:1">
+            <div style="font-size:14px">${item.title}</div>
+            <div class="small">${item.qty} × ${formatQAR(item.price)}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:700">${formatQAR(item.price * item.qty)}</div>
+            <button class="small" onclick="removeFromCart(${item.id})" style="margin-top:6px;background:transparent;border:0;color:#c33;cursor:pointer">Remove</button>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+      document.getElementById('cart-total').innerText = formatQAR(total);
+      document.getElementById('checkout-btn').disabled = cart.length === 0;
+    }
+
+    function checkout(){
+      if(cart.length === 0) return alert('Your cart is empty.');
+      // beginner example: just show a summary. In a real store you'd integrate payments.
+      let summary = 'Order summary:\n\n';
+      cart.forEach(i => summary += `${i.qty} × ${i.title} — ${formatQAR(i.price * i.qty)}\n`);
+      summary += '\nTotal: ' + document.getElementById('cart-total').innerText + '\n\nPickup in Doha or contact us to ship.';
+      alert(summary);
+      // clear cart after checkout
+      cart.length = 0;
+      renderCart();
+    }
+
+    function scrollToProducts(){
+      document.getElementById('products').scrollIntoView({behavior:'smooth'});
+    }
+
+    // run on load
+    document.getElementById('year').innerText = new Date().getFullYear();
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
